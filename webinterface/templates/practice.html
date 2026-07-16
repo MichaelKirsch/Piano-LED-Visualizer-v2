@@ -1,5 +1,20 @@
 <div id="practice-container" class="transition duration-300 slide-in-content w-full h-full flex flex-col snap-center"
     style="min-height: calc(100dvh - 120px); min-height: calc(100vh - 120px);">
+    <div class="practice-led-settings glass shadow-glass-lg rounded-glass p-3 sm:p-4 mb-3 flex flex-wrap items-end gap-3">
+        <div class="learning-field flex-1 min-w-[12rem]">
+            <label class="learning-label" data-translate="future_notes">Future Notes</label>
+            <div class="relative">
+                <select id="practice_future_notes" onchange="change_setting('change_future_notes', this.value)"
+                        class="learning-select block appearance-none w-full glass-light hover:glass py-3 px-4 pr-10 rounded-glass transition-smooth-fast leading-tight focus:outline-none">
+                    <option value="0" data-translate="disabled">Disabled</option>
+                    <option value="1" data-translate="enabled">Enabled</option>
+                </select>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 flex-1 min-w-[16rem]" data-translate="practice_led_hint">
+            Enable Light Keys in the practice tool MIDI settings. Set LED Sides colors to Off for precise single-LED hints.
+        </p>
+    </div>
     <div class="flex-1 glass shadow-glass-lg rounded-glass transition-smooth relative overflow-hidden"
         style="min-height: 600px; height: 100%;">
         <div id="practice-loading"
@@ -34,6 +49,21 @@
             } catch (e) {
                 return false;
             }
+        }
+
+        // Sync LED-related learning settings used by practice mode
+        function syncPracticeLedSettings() {
+            fetch('/api/get_learning_status')
+                .then(function (response) { return response.json(); })
+                .then(function (data) {
+                    var futureNotes = document.getElementById('practice_future_notes');
+                    if (futureNotes && data.show_future_notes !== undefined) {
+                        futureNotes.value = String(data.show_future_notes);
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error loading practice LED settings:', error);
+                });
         }
 
         // Get practice tool URL from settings
@@ -237,6 +267,7 @@
 
             // Get practice tool URL
             getPracticeToolUrl();
+            syncPracticeLedSettings();
 
             // Establish websocket connection
             connectPracticeWebSocket();

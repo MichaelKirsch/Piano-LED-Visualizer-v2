@@ -15,6 +15,10 @@ except ImportError:
     app_state = DummyAppState()
 
 OFF_COLOR = Color(0, 0, 0)
+# Practice / Synthesia light-key hints use velocity to distinguish upcoming vs current notes.
+FUTURE_NOTE_VELOCITY_THRESHOLD = 64
+LEARNING_HINT_BRIGHTNESS = 0.5
+LEARNING_FUTURE_BRIGHTNESS = 0.05
 
 
 class MIDIEventProcessor:
@@ -159,6 +163,12 @@ class MIDIEventProcessor:
             if channel == "12" or channel == "11":
                 # External software is turning off the LED - clear tracking
                 self.ledstrip.keylist_external_software[note_position] = 0
+                idle_color, use_backlight = self._resolve_idle_color()
+                self._apply_idle_color(note_position, idle_color, use_backlight, use_adjacent=False)
+                self.ledstrip.strip.show()
+                if self.saving.is_recording:
+                    self.saving.add_track("note_off", msg.note, 0, msg_timestamp)
+                return
         
         velocity = 0
         self.ledstrip.keylist_status[note_position] = 0
@@ -194,7 +204,7 @@ class MIDIEventProcessor:
         # If LED is completely off, set appropriate color
         if self.ledstrip.keylist[note_position] <= 0:
             idle_color, use_backlight = self._resolve_idle_color()
-            self._apply_idle_color(note_position, idle_color, use_backlight)
+            self._apply_idle_color(note_position, idle_color, use_backlight, use_adjacent=not self._is_external_hint_channel(channel))
 
         # Record the note-off event if recording is active
         if self.saving.is_recording:
@@ -267,16 +277,27 @@ class MIDIEventProcessor:
             # Mark this LED as externally controlled by external software
             self.ledstrip.keylist_external_software[note_position] = 1
             if self.ledsettings.skipped_notes != "Finger-based":
-                # Apply right hand or left hand color
+                is_preview_note = velocity <= FUTURE_NOTE_VELOCITY_THRESHOLD
+                if is_preview_note and self.learning.show_future_notes != 1:
+                    return
+
+                # Apply right hand or left hand color — single precise LED (no adjacent spill)
                 if channel == "12":
                     hand_color = self.learning.hand_colorR
+                    hand_active = self.learning.is_led_activeR == 1
                 else:
                     hand_color = self.learning.hand_colorL
+                    hand_active = self.learning.is_led_activeL == 1
 
-                red, green, blue = map(int, self.learning.hand_colorList[hand_color])
+                if not hand_active:
+                    return
+
+                brightness = LEARNING_FUTURE_BRIGHTNESS if is_preview_note else LEARNING_HINT_BRIGHTNESS
+                red, green, blue = [int(c * brightness) for c in self.learning.hand_colorList[hand_color]]
                 s_color = Color(red, green, blue)
                 self.ledstrip.strip.setPixelColor(note_position, s_color)
-                self.ledstrip.set_adjacent_colors(note_position, s_color, False)
+                self.ledstrip.strip.show()
+            return
         else:
             # Normal channel is taking control - clear external software flag
             if self.ledstrip.keylist_external_software[note_position] == 1:
@@ -364,7 +385,16 @@ class MIDIEventProcessor:
             ), True
         return OFF_COLOR, False
 
-    def _apply_idle_color(self, note_position, color_value, is_backlight):
+    @staticmethod
+    def _is_external_hint_channel(channel):
+        return channel in ("11", "12")
+
+    def _apply_idle_color(self, note_position, color_value, is_backlight, use_adjacent=True):
         """Apply either the backlight color or switch LEDs off for a key."""
         self.ledstrip.strip.setPixelColor(note_position, color_value)
-        self.ledstrip.set_adjacent_colors(note_position, color_value, True if is_backlight else False)
+        if use_adjacent:
+            self.ledstrip.set_adjacent_colors(note_position, color_value, True if is_backlight else False)
+
+    def _get_msg_channel(self, msg):
+        channel = find_between(str(msg), "channel=", " ")
+        return channel.rstrip(',') if channel else False

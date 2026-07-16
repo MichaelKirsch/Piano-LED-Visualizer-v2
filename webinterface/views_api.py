@@ -1495,6 +1495,7 @@ def change_setting():
     if setting_name == "change_future_notes":
         value = int(value)
         app_state.learning.show_future_notes = value
+        app_state.learning.usersettings.change_setting_value("show_future_notes", value)
         # Update tempo for current song
         try:
             profile_id = getattr(app_state, 'current_profile_id', None)
@@ -1506,6 +1507,7 @@ def change_setting():
                     updated = pm.update_learning_setting(int(profile_id), app_state.learning.current_song_name, "future_notes", app_state.learning.show_future_notes)
         except Exception as e:
             logger.warning(f"Failed to update learning section: {e}")
+        return jsonify(success=True, reload_learning_settings=True)
 
     if setting_name == "change_learning_loop":
         value = int(value == 'true')

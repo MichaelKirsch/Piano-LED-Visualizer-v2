@@ -614,7 +614,6 @@ class LearnMIDI:
                             else:
                                 brightness = 0.5
 
-                            red, green, blue = [0, 0, 0]
                             if msg.channel == 1:
                                 red, green, blue = [int(c * brightness) for c in self.hand_colorList[self.hand_colorR]]
                                 if self.is_led_activeR == 0:
@@ -635,8 +634,13 @@ class LearnMIDI:
                                             hand_hint_notesL.remove(note_position)
                                         except ValueError:
                                             pass  # do nothing
-                            self.ledstrip.strip.setPixelColor(note_position, Color(red, green, blue))
-                            self.ledstrip.strip.show()
+                            hand_active = (
+                                (msg.channel == 1 and self.is_led_activeR == 1) or
+                                (msg.channel == 2 and self.is_led_activeL == 1)
+                            )
+                            if hand_active:
+                                self.ledstrip.strip.setPixelColor(note_position, Color(red, green, blue))
+                                self.ledstrip.strip.show()
                         # Save notes to press
                         if msg.type == 'note_on' and msg.velocity > 0 and (
                                 msg.channel == self.hands or self.hands == 0):
