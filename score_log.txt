@@ -1,0 +1,2 @@
+2026-07-16 18:00:25,584 - score_logger - INFO - Score logger initialized.
+2026-07-16 18:00:34,805 - score_logger - INFO - Score logger initialized.

@@ -22,7 +22,7 @@ var opt, onYouTubeIframeAPIReady, msc_credits, media_height, times_arr, offset_j
         'jump': 0, 'no_menu': 1, 'repufld': 0, 'noplyr': 1, 'nocsr': 0, 'media_height': '', 'btns': 1, 'ipadr': '',
         'mstr': 0, 'autscl': 1, 'ctrmed': 0, 'ctrnot': 1, 'lncsr': 0, 'opacity': 0.2, 'synbox': 0, 'speed': 1.0,
         'top_margin': 0, 'yubvid': '', 'nomed': 0, 'delay': 0, 'repskip': 0, 'spdctl': 0, 'lopctl': 0, 'metro': 0,
-        'btime': -1, 'etime': 0, offrol: 0, dotted: 0
+        'btime': -1, 'etime': 0, offrol: 0, dotted: 0, followScore: 0
     }
     onYouTubeIframeAPIReady = yubApiReady;
     var rMarks = [];    // a marker for each voice
@@ -116,6 +116,13 @@ var opt, onYouTubeIframeAPIReady, msc_credits, media_height, times_arr, offset_j
             var ybalk = $('#shade')[0].getBoundingClientRect().top;
             var yrol = $('#rollijn')[0].getBoundingClientRect().top + dottedHeight;
             ntop = ntop + ybalk - yrol;
+        } else if (opt.followScore) {
+            var lineTop = this.line_offsets [line];
+            var lineBottom = this.line_offsets [line + 1] || (lineTop + 120);
+            var lineHeight = lineBottom - lineTop;
+            var viewHeight = deNot.clientHeight;
+            ntop = lineTop - Math.max(this.vmargin, (viewHeight - lineHeight) / 2);
+            ntop = Math.max(0, Math.min(ntop, deNot.scrollHeight - viewHeight));
         } else {
             var ymx = ntop + deNot.clientHeight - this.vmargin;    // bottom of notation area
             if (this.line_offsets [line + 1] > ymx || this.line_offsets [line] < ntop + this.vmargin) {
@@ -148,7 +155,11 @@ var opt, onYouTubeIframeAPIReady, msc_credits, media_height, times_arr, offset_j
             this.shade.attr('fill-opacity', this.noCursor ? '0.0' : '' + opt.opacity);
             xleft = xleft / this.scale;             // g-coors -> pixels for scroll test
             xright = xright / this.scale;
-            if (xright > xmx || xleft < nleft + this.hmargin) {
+            if (opt.followScore) {
+                var xCenter = (xleft + xright) / 2;
+                nleft = Math.max(0, xCenter - deNot.clientWidth / 3);
+                nleft = Math.min(nleft, Math.max(0, deNot.scrollWidth - deNot.clientWidth));
+            } else if (xright > xmx || xleft < nleft + this.hmargin) {
                 nleft = xleft > this.hmargin ? xleft - this.hmargin : 0;
             }
         }
@@ -456,7 +467,8 @@ var opt, onYouTubeIframeAPIReady, msc_credits, media_height, times_arr, offset_j
         var fTop = deTop != deNot.scrollTop;
         if (!fLeft && !fTop) return;
         if (hasSmooth) {
-            deNot.style ['scroll-behavior'] = noAnim || fLeft ? 'auto' : 'smooth';
+            var useSmooth = opt.followScore && fTop && !fLeft;
+            deNot.style ['scroll-behavior'] = (noAnim || fLeft) && !useSmooth ? 'auto' : 'smooth';
             deNot.scroll(nleft, deTop);
         } else {
             if (fLeft) deNot.scrollLeft = nleft;
@@ -1862,6 +1874,18 @@ var opt, onYouTubeIframeAPIReady, msc_credits, media_height, times_arr, offset_j
         });
 
         window.sheet_offset = 0;
+
+        // Practice mode: follow cursor and show note-level highlight
+        opt.followScore = 1;
+        opt.lncsr = 1;
+        opt.opacity = 0.35;
+        noprogress = false;
+        $('#lncsr').prop('checked', true);
+        $('#woff').prop('checked', false);
+        var followCheckbox = document.getElementById('sheet_follow_scroll');
+        if (followCheckbox) {
+            opt.followScore = followCheckbox.checked ? 1 : 0;
+        }
 
         window.go_to_time = function (time) {
             //console.log(elmed.currentTime);

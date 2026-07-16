@@ -1,6 +1,12 @@
 import logging
+import os
 from logging.handlers import RotatingFileHandler
 import sys
+
+# Pi installs to /home/Piano-LED-Visualizer; elsewhere use the project root.
+_project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+_log_dir = '/home/Piano-LED-Visualizer' if os.path.isdir('/home/Piano-LED-Visualizer') else _project_root
+_log_file = os.path.join(_log_dir, 'visualizer.log')
 
 # Create a custom logger
 logger = logging.getLogger("my_app")
@@ -10,7 +16,7 @@ logger.setLevel(logging.DEBUG)
 
 # Create handlers
 console_handler = logging.StreamHandler()
-file_handler = RotatingFileHandler('/home/Piano-LED-Visualizer/visualizer.log', maxBytes=500000, backupCount=10)
+file_handler = RotatingFileHandler(_log_file, maxBytes=500000, backupCount=10)
 
 
 # Set the level for handlers

@@ -229,6 +229,10 @@ const translations = {
         sheet_tip_line_3: "For the best result do the following:",
         sheet_tip_line_4: "1. Convert your music notation to a midi file using Musescore or similar program, name it the same as the midi file you want to load. (E.g. my_music.mid and my_music.xml)",
         sheet_tip_line_5: "2. Upload the midi file and the music notation file.",
+        sheet_fullscreen: "Fullscreen",
+        sheet_exit_fullscreen: "Exit fullscreen",
+        sheet_follow_scroll: "Follow position",
+        sheet_demo_play: "Demo playback",
 
         //songslist
         name: "Name",
@@ -1377,6 +1381,10 @@ const translations = {
         sheet_tip_line_3: "Für das beste Ergebnis machen Sie folgendes:",
         sheet_tip_line_4: "1. Konvertieren Sie Ihre Musiknotation in eine Midi-Datei mit Musescore oder einem ähnlichen Programm, nennen Sie es gleich wie die Midi-Datei, die Sie laden wollen. (z.B. meine_musik.mid und meine_musik.xml)",
         sheet_tip_line_5: "2. Laden Sie die Midi-Datei und die Musiknotationsdatei hoch.",
+        sheet_fullscreen: "Vollbild",
+        sheet_exit_fullscreen: "Vollbild beenden",
+        sheet_follow_scroll: "Position verfolgen",
+        sheet_demo_play: "Demo abspielen",
 
         //songslist
         name: "Name",

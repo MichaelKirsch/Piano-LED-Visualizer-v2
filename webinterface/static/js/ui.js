@@ -2057,7 +2057,7 @@ function get_learning_status(loop_call = false) {
 
                 const value_right_percent_reverse = 100 - value_right_percent;
 
-                document.getElementById("learning_slider_wrapper").innerHTML = '<div slider="" id="slider-distance">\n' +
+                document.getElementById("learning_slider_wrapper").innerHTML = '<div slider="" id="slider-distance" class="learning-range-slider">\n' +
                     '<div>\n' +
                     '   <div inverse-left="" style="width:' + value_left_percent + '%;"></div>\n' +
                     '   <div inverse-right="" style="width:' + value_right_percent_reverse + '%;"></div>\n' +

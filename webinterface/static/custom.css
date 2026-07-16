@@ -1583,3 +1583,304 @@ canvas {
         }
     }
 }
+
+/* Learning / practice controls — touch-friendly for tablet */
+.learning-controls-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.learning-controls-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .learning-controls-grid--2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.learning-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.learning-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: rgb(75 85 99);
+}
+
+.dark .learning-label {
+    color: rgb(209 213 219);
+}
+
+.learning-value {
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.learning-select,
+.learning-number-input {
+    min-height: 3.25rem;
+    font-size: 1rem;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.learning-primary-btn {
+    min-width: 11rem;
+    min-height: 3.25rem;
+    padding: 0.75rem 1.25rem;
+}
+
+.learning-step-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    min-height: 3rem;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.55);
+    color: rgb(55 65 81);
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.dark .learning-step-btn {
+    background: rgba(55, 65, 81, 0.65);
+    color: rgb(229 231 235);
+}
+
+.learning-step-btn:hover {
+    background: rgba(229, 231, 235, 0.95);
+}
+
+.dark .learning-step-btn:hover {
+    background: rgba(75, 85, 99, 0.95);
+}
+
+.learning-step-btn:active {
+    transform: scale(0.96);
+}
+
+.learning-checkbox {
+    width: 1.5rem;
+    height: 1.5rem;
+    min-width: 1.5rem;
+    min-height: 1.5rem;
+    flex-shrink: 0;
+    accent-color: #0075ff;
+    cursor: pointer;
+}
+
+.learning-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgb(75 85 99);
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.dark .learning-toggle {
+    color: rgb(209 213 219);
+}
+
+.learning-tempo-row,
+.learning-color-row {
+    min-height: 3.25rem;
+}
+
+.learning-tempo-bound {
+    min-width: 2rem;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+.learning-range {
+    height: 0.75rem;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(0, 117, 255, 0.15);
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.learning-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: #0075ff;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.learning-range::-moz-range-thumb {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: #0075ff;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.learning-slider-wrap {
+    padding: 1.25rem 0.5rem 0.75rem;
+}
+
+.learning-slider-wrap [slider] {
+    position: relative;
+    height: 2.5rem;
+    margin: 0 0.5rem;
+}
+
+.learning-slider-wrap [slider] > div > [inverse-left],
+.learning-slider-wrap [slider] > div > [inverse-right] {
+    height: 14px;
+    border-radius: 12px;
+}
+
+.learning-slider-wrap [slider] > div > [range] {
+    height: 14px;
+    border-radius: 14px;
+}
+
+.learning-slider-wrap [slider] > div > [thumb] {
+    top: -6px;
+    height: 28px;
+    width: 28px;
+    margin-left: -14px;
+    border: 3px solid #fff;
+}
+
+.learning-slider-wrap div[slider] > input[type=range]::-webkit-slider-thumb {
+    width: 44px;
+    height: 44px;
+}
+
+.learning-slider-wrap div[slider] > input[type=range]::-moz-range-thumb {
+    width: 44px;
+    height: 44px;
+}
+
+.learning-loop-section {
+    padding: 0.5rem 0;
+}
+
+.learning-loop-endpoint .learning-label.sm\:justify-end {
+    justify-content: flex-end;
+}
+
+.learning-color-swatch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3.5rem;
+    min-height: 3.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.35);
+    padding: 0.25rem;
+}
+
+.dark .learning-color-swatch {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+@media (pointer: coarse), (max-width: 1024px) {
+    .learning-controls-panel {
+        gap: 1.5rem;
+        padding: 1.25rem 1rem 1.5rem;
+    }
+
+    .learning-step-btn {
+        min-width: 3.5rem;
+        min-height: 3.5rem;
+    }
+
+    .learning-select,
+    .learning-number-input {
+        min-height: 3.75rem;
+        font-size: 1.125rem;
+        padding-top: 0.875rem;
+        padding-bottom: 0.875rem;
+    }
+
+    .learning-primary-btn {
+        min-height: 3.75rem;
+        min-width: 100%;
+        max-width: 22rem;
+        font-size: 1.0625rem;
+    }
+
+    .learning-toggle {
+        min-height: 3.25rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .learning-checkbox {
+        width: 1.75rem;
+        height: 1.75rem;
+        min-width: 1.75rem;
+        min-height: 1.75rem;
+    }
+
+    .learning-range {
+        height: 1rem;
+    }
+
+    .learning-range::-webkit-slider-thumb {
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+
+    .learning-range::-moz-range-thumb {
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+
+    .learning-slider-wrap [slider] {
+        height: 3rem;
+        margin: 0 0.75rem;
+    }
+
+    .learning-slider-wrap [slider] > div > [inverse-left],
+    .learning-slider-wrap [slider] > div > [inverse-right],
+    .learning-slider-wrap [slider] > div > [range] {
+        height: 18px;
+    }
+
+    .learning-slider-wrap [slider] > div > [thumb] {
+        top: -8px;
+        height: 34px;
+        width: 34px;
+        margin-left: -17px;
+    }
+
+    .learning-slider-wrap div[slider] > input[type=range]::-webkit-slider-thumb {
+        width: 48px;
+        height: 48px;
+    }
+
+    .learning-slider-wrap div[slider] > input[type=range]::-moz-range-thumb {
+        width: 48px;
+        height: 48px;
+    }
+}

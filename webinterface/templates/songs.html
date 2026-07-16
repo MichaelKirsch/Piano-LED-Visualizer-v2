@@ -309,14 +309,15 @@
         </div>
 
         <div id="learn_midi_wrapper" class="contents hidden">
-            <div class="flex m-auto">
-                <div class="p-2">
+            <div class="learning-controls-panel glass shadow-glass-lg rounded-glass w-full max-w-3xl mx-auto px-4 sm:px-6 py-4 pb-4 m-1">
+            <div class="learning-action-row flex flex-wrap items-center justify-center gap-3 mb-4">
+                <div>
                     <button id="start_learning" onclick="change_setting('start_learning_song', '');
                         this.classList.add('hidden');
                         this.nextElementSibling.classList.remove('hidden');"
-                            class="w-40 h-10 outline-none mb-2 glass-light hover:glass font-bold py-2 px-2
-                            rounded-glass transition-smooth-fast inline-flex items-center pointer-events-none opacity-50">
-                        <span class="flex uppercase text-xs m-auto ">
+                            class="learning-primary-btn outline-none glass-light hover:glass font-bold
+                            rounded-glass transition-smooth-fast inline-flex items-center justify-center pointer-events-none opacity-50">
+                        <span class="flex items-center gap-2 uppercase text-sm sm:text-base m-auto">
                             <div id="learning_status" class="align-middle">...</div>
                         </span>
                     </button>
@@ -324,10 +325,10 @@
                     <button id="stop_learning" onclick="change_setting('stop_learning_song', '');
                     this.classList.add('hidden');
                     this.previousElementSibling.classList.remove('hidden');"
-                            class="w-40 h-10 outline-none mb-2 glass-light hover:glass font-bold py-2 px-2
-                            rounded-glass transition-smooth-fast inline-flex items-center hidden">
-                        <span class="flex uppercase text-xs m-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            class="learning-primary-btn outline-none glass-light hover:glass font-bold
+                            rounded-glass transition-smooth-fast inline-flex items-center justify-center hidden">
+                        <span class="flex items-center gap-2 uppercase text-sm sm:text-base m-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -340,27 +341,25 @@
                         </span>
                     </button>
                 </div>
-                <div class="p-2 mt-2">
-                    <label class="inline-flex items-center">
-                        <input id="is_loop_active" onchange="change_setting('change_learning_loop', this.checked)"
-                               class="w-4 h-4 mr-2 border border-gray-300 rounded"
-                               type="checkbox"/>
-                        <div data-translate="loop">Loop</div>
-                    </label>
-                </div>
+                <label class="learning-toggle inline-flex items-center gap-3 px-4 py-3 glass-light rounded-glass cursor-pointer">
+                    <input id="is_loop_active" onchange="change_setting('change_learning_loop', this.checked)"
+                           class="learning-checkbox"
+                           type="checkbox"/>
+                    <span class="text-base font-medium" data-translate="loop">Loop</span>
+                </label>
             </div>
 
 
-            <div class="flex flex-wrap w-full md:w-1/2 m-auto">
-                <div class="w-full md:w-1/2 px-3 md:mb-0 m-auto">
-                    <label class="block uppercase tracking-wide text-xs font-bold mt-2 text-gray-600 dark:text-gray-400"
+            <div class="learning-controls-grid learning-controls-grid--2">
+                <div class="learning-field">
+                    <label class="learning-label"
                            data-translate="practice">
                         Practice
                     </label>
                     <div class="relative">
                         <select onchange="change_setting('change_practice', this.value)" id="practice"
-                                class="h-10 block appearance-none w-full glass-light hover:glass
-                py-2 px-2 pr-8 rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                class="learning-select block appearance-none w-full glass-light hover:glass
+                py-3 px-4 pr-10 rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                             <option value="0" data-translate="melody">Melody</option>
                             <option value="1" data-translate="rhythm">Rhythm</option>
                             <option value="2" data-translate="listen">Listen</option>
@@ -372,51 +371,49 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-full md:w-1/2 px-3 m-auto">
-                    <label class="block uppercase tracking-wide text-xs font-bold mt-2 text-gray-600 dark:text-gray-400">
-                        <div data-translate="tempo">Tempo</div>
-                        (<b id="tempo">100</b>%)
+                <div class="learning-field">
+                    <label class="learning-label">
+                        <span data-translate="tempo">Tempo</span>
+                        <span class="learning-value">(<b id="tempo">100</b>%)</span>
                     </label>
-                    <div class="justify-center flex">
-                        <svg onclick="input = document.getElementById('tempo_slider');
-                            input.value = parseInt(input.value) - 1;
-                            if(input.value <= 9){input.value = 1};
-                            change_setting('change_tempo', input.value);
-                            document.getElementById('tempo').innerHTML = input.value;" class="h-8 w-6 cursor-pointer"
-                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <div class="w-full justify-center flex text-sm text-gray-600 dark:text-gray-400">
-                            10<input onchange="change_setting('change_tempo', this.value);"
+                    <div class="learning-tempo-row flex items-center gap-2">
+                        <button type="button" class="learning-step-btn"
+                                onclick="var input=document.getElementById('tempo_slider');input.value=Math.max(10,parseInt(input.value)-5);change_setting('change_tempo',input.value);document.getElementById('tempo').innerHTML=input.value;"
+                                aria-label="Tempo verringern">
+                            <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </button>
+                        <div class="learning-tempo-slider flex-1 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                            <span class="learning-tempo-bound">10</span>
+                            <input onchange="change_setting('change_tempo', this.value);"
                                      oninput="document.getElementById('tempo_slider').value = this.value;
                                     document.getElementById('tempo').innerHTML = this.value;"
-                                     id="tempo_slider" class="w-1/2 mx-2" type="range" value="100" min="10" max="200">200
+                                     id="tempo_slider" class="learning-range flex-1" type="range" value="100" min="10" max="200">
+                            <span class="learning-tempo-bound">200</span>
                         </div>
-                        <svg onclick="input = document.getElementById('tempo_slider');
-                            input.value = parseInt(input.value) + 1;
-                            if(input.value >= 201){input.value = 200};
-                            change_setting('change_tempo', input.value);
-                            document.getElementById('tempo').innerHTML = input.value;" class="h-8 w-6 cursor-pointer"
-                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                        <button type="button" class="learning-step-btn"
+                                onclick="var input=document.getElementById('tempo_slider');input.value=Math.min(200,parseInt(input.value)+5);change_setting('change_tempo',input.value);document.getElementById('tempo').innerHTML=input.value;"
+                                aria-label="Tempo erhöhen">
+                            <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
-
-
             </div>
 
-            <div class="flex flex-wrap w-full md:w-1/2 m-auto">
-                <div class="w-full md:w-1/2 px-3 md:mb-0 m-auto">
-                    <label class="block uppercase tracking-wide text-xs font-bold mt-2 text-gray-600 dark:text-gray-400"
+            <div class="learning-controls-grid learning-controls-grid--2">
+                <div class="learning-field">
+                    <label class="learning-label"
                            data-translate="hands">
                         Hands
                     </label>
                     <div class="relative">
-                        <select onchange="change_setting('change_hands', this.value)" id="hands" class="h-10 block appearance-none w-full glass-light hover:glass
-                py-2 px-2 pr-8 rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                        <select onchange="change_setting('change_hands', this.value)" id="hands" class="learning-select block appearance-none w-full glass-light hover:glass
+                py-3 px-4 pr-10 rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                             <option value="0" data-translate="both">Both</option>
                             <option value="1" data-translate="right">Right</option>
                             <option value="2" data-translate="left">Left</option>
@@ -428,14 +425,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-full md:w-1/2 px-3 md:mb-0 m-auto">
-                    <label class="block uppercase tracking-wide text-xs font-bold mt-2 text-gray-600 dark:text-gray-400"
+                <div class="learning-field">
+                    <label class="learning-label"
                            data-translate="mute_hands">
                         Mute hands
                     </label>
                     <div class="relative">
-                        <select onchange="change_setting('change_mute_hand', this.value)" id="mute_hand" class="h-10 block appearance-none w-full glass-light hover:glass
-                py-2 px-2 pr-8 rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                        <select onchange="change_setting('change_mute_hand', this.value)" id="mute_hand" class="learning-select block appearance-none w-full glass-light hover:glass
+                py-3 px-4 pr-10 rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                             <option value="0" data-translate="off">Off</option>
                             <option value="1" data-translate="right">Right</option>
                             <option value="2" data-translate="left">Left</option>
@@ -449,15 +446,15 @@
                 </div>
             </div>
 
-            <div class="flex flex-wrap w-full md:w-1/2 m-auto">
-                <div class="w-full md:w-1/2 px-3 md:mb-0 m-auto">
-                    <label class="block uppercase tracking-wide text-xs font-bold mt-2 text-gray-600 dark:text-gray-400"
+            <div class="learning-controls-grid learning-controls-grid--2">
+                <div class="learning-field">
+                    <label class="learning-label"
                            data-translate="wrong_notes">
                         Wrong notes
                     </label>
                     <div class="relative">
-                        <select onchange="change_setting('change_wrong_notes', this.value)" id="wrong_notes" class="h-10 block appearance-none w-full glass-light hover:glass
-                py-2 px-2 pr-8 rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                        <select onchange="change_setting('change_wrong_notes', this.value)" id="wrong_notes" class="learning-select block appearance-none w-full glass-light hover:glass
+                py-3 px-4 pr-10 rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                             <option value="0" data-translate="disabled">Disabled</option>
                             <option value="1" data-translate="enabled">Enabled</option>
                         </select>
@@ -468,14 +465,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-full md:w-1/2 px-3 md:mb-0 m-auto">
-                    <label class="block uppercase tracking-wide text-xs font-bold mt-2 text-gray-600 dark:text-gray-400"
+                <div class="learning-field">
+                    <label class="learning-label"
                            data-translate="future_notes">
                         Future notes
                     </label>
                     <div class="relative">
-                        <select onchange="change_setting('change_future_notes', this.value)" id="future_notes" class="h-10 block appearance-none w-full glass-light hover:glass
-                py-2 px-2 pr-8 rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                        <select onchange="change_setting('change_future_notes', this.value)" id="future_notes" class="learning-select block appearance-none w-full glass-light hover:glass
+                py-3 px-4 pr-10 rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                             <option value="0" data-translate="disabled">Disabled</option>
                             <option value="1" data-translate="enabled">Enabled</option>
                         </select>
@@ -488,24 +485,20 @@
                 </div>
             </div>
 
-            <div class="flex flex-wrap w-full m-auto">
-                <div class="w-full md:w-1/2 px-3 md:mb-0 m-auto">
-                    <label class="block uppercase tracking-wide text-xs font-bold mt-2 text-gray-600 dark:text-gray-400"
-                           data-translate="number_of_mistakes">
-                        Number of mistakes to restart loop (0 - never)
-                    </label>
-                    <div class="flex">
-                        <input onchange="change_setting('number_of_mistakes', document.getElementById('number_of_mistakes').value)"
-                               id="number_of_mistakes" name="field_name" type="number" value="0" min="0" max="255"
-                               class="h-10 block appearance-none w-full glass-light hover:glass text-center
-                               rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                    </div>
-                </div>
+            <div class="learning-field">
+                <label class="learning-label"
+                       data-translate="number_of_mistakes">
+                    Number of mistakes to restart loop (0 - never)
+                </label>
+                <input onchange="change_setting('number_of_mistakes', document.getElementById('number_of_mistakes').value)"
+                       id="number_of_mistakes" name="field_name" type="number" value="0" min="0" max="255"
+                       class="learning-number-input block appearance-none w-full glass-light hover:glass text-center
+                       rounded-glass transition-smooth-fast leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
             </div>
 
-            <div class="w-full md:w-1/2 m-auto">
-                <div id="learning_slider_wrapper" class="mt-4">
-                    <div slider="" id="slider-distance">
+            <div class="learning-loop-section">
+                <div id="learning_slider_wrapper" class="learning-slider-wrap mt-2">
+                    <div slider="" id="slider-distance" class="learning-range-slider">
                         <div>
                             <div inverse-left="" style="width:0%;"></div>
                             <div inverse-right="" style="width:0%;"></div>
@@ -527,135 +520,135 @@
                                document.getElementById('end_point').innerHTML = this.value">
                     </div>
                 </div>
-                <div class="flex">
-                    <label class="w-1/2 block text-xs text-gray-600 dark:text-gray-400">
-                        <div data-translate="start_point">Start point</div>
-                        (<b id="start_point">0</b>%)</b>
-
-                        <div class='has-tooltip float-left'>
-                        <span class='inline-block tooltip rounded shadow-lg p-1 bg-gray-100
-                        dark:bg-gray-600 text-gray-600 dark:text-gray-400 -mt-8'
-                              data-translate="set_the_current_track_time">
-                            Set the current track time as the loop start
-                        </span>
-                            <svg onclick="change_setting('set_current_time_as_start_point', '')"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 class="h-5 w-5 text-gray-800 dark:text-gray-200 cursor-pointer"
-                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
-                            </svg>
+                <div class="learning-loop-controls grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div class="learning-loop-endpoint">
+                        <div class="learning-label mb-2">
+                            <span data-translate="start_point">Start point</span>
+                            <span class="learning-value">(<b id="start_point">0</b>%)</span>
                         </div>
-
-                    </label>
-                        <svg onclick="document.getElementById('learning_start_point').stepDown();
-                        document.getElementById('learning_start_point').dispatchEvent(new Event('change'));
-                        document.getElementById('learning_start_point').dispatchEvent(new Event('input'));
-                    " xmlns="http://www.w3.org/2000/svg"
-                             class="m-auto w-full h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24"
-                             stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <svg onclick="document.getElementById('learning_end_point').stepUp();
-                        document.getElementById('learning_end_point').dispatchEvent(new Event('change'));
-                        document.getElementById('learning_end_point').dispatchEvent(new Event('input'));
-                        " xmlns="http://www.w3.org/2000/svg"
-                             class="m-auto w-full h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24"
-                             stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    <label class="w-1/2 float-right text-xs text-right block text-gray-600 dark:text-gray-400">
-                        <div data-translate="end_point">End point</div>
-                        (<b id="end_point">0</b>%)</b>
-                        <div class='has-tooltip float-right'>
-                        <span class='inline-block tooltip rounded shadow-lg p-1 bg-gray-100
-                        dark:bg-gray-600 text-gray-600 dark:text-gray-400 -mt-8'
-                              data-translate="set_the_current_track_time_as_the_loop_end">
-                            Set the current track time as the loop end
-                        </span>
-                            <svg onclick="change_setting('set_current_time_as_end_point', '')"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 class="h-5 w-5 text-gray-800 dark:text-gray-200 cursor-pointer"
-                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
-                            </svg>
+                        <div class="flex items-center gap-2">
+                            <button type="button" class="learning-step-btn"
+                                    onclick="change_setting('set_current_time_as_start_point', '')"
+                                    title="Aktuelle Position als Start" data-translate-title="set_the_current_track_time">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="learning-step-btn"
+                                    onclick="document.getElementById('learning_start_point').stepDown();document.getElementById('learning_start_point').dispatchEvent(new Event('change'));document.getElementById('learning_start_point').dispatchEvent(new Event('input'));">
+                                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </button>
+                            <button type="button" class="learning-step-btn"
+                                    onclick="document.getElementById('learning_start_point').stepUp();document.getElementById('learning_start_point').dispatchEvent(new Event('change'));document.getElementById('learning_start_point').dispatchEvent(new Event('input'));">
+                                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </button>
                         </div>
-                    </label>
+                    </div>
+                    <div class="learning-loop-endpoint sm:text-right">
+                        <div class="learning-label mb-2 sm:justify-end">
+                            <span data-translate="end_point">End point</span>
+                            <span class="learning-value">(<b id="end_point">100</b>%)</span>
+                        </div>
+                        <div class="flex items-center gap-2 sm:justify-end">
+                            <button type="button" class="learning-step-btn"
+                                    onclick="document.getElementById('learning_end_point').stepDown();document.getElementById('learning_end_point').dispatchEvent(new Event('change'));document.getElementById('learning_end_point').dispatchEvent(new Event('input'));">
+                                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </button>
+                            <button type="button" class="learning-step-btn"
+                                    onclick="document.getElementById('learning_end_point').stepUp();document.getElementById('learning_end_point').dispatchEvent(new Event('change'));document.getElementById('learning_end_point').dispatchEvent(new Event('input'));">
+                                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </button>
+                            <button type="button" class="learning-step-btn"
+                                    onclick="change_setting('set_current_time_as_end_point', '')"
+                                    title="Aktuelle Position als Ende" data-translate-title="set_the_current_track_time_as_the_loop_end">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex flex-wrap w-full md:w-1/2 m-auto">
-                <div class="w-full md:w-1/2 px-3 m-auto">
-                    <label class="block uppercase tracking-wide text-xs font-bold mt-2 text-gray-600 dark:text-gray-400"
+            <div class="learning-controls-grid learning-controls-grid--2">
+                <div class="learning-field">
+                    <label class="learning-label"
                            data-translate="left_hand_color">
                         Left hand color
                     </label>
-                    <div class="justify-center flex">
-                        <svg onclick="change_setting('change_handL_color', -1)" xmlns="http://www.w3.org/2000/svg"
-                             class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                        </svg>
-                        <div class="w-full justify-center flex text-sm text-gray-600 dark:text-gray-400">
-                            <svg class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <rect id="hand_colorL" width="30" height="30" style="fill:rgb(0,0,255);"/>
+                    <div class="learning-color-row flex items-center justify-center gap-3">
+                        <button type="button" class="learning-step-btn" onclick="change_setting('change_handL_color', -1)" aria-label="Farbe links">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
+                        <div class="learning-color-swatch">
+                            <svg class="h-12 w-12" viewBox="0 0 30 30">
+                                <rect id="hand_colorL" width="30" height="30" rx="6" style="fill:rgb(0,0,255);"/>
                             </svg>
                         </div>
-                        <svg onclick="change_setting('change_handL_color', 1)" xmlns="http://www.w3.org/2000/svg"
-                             class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
+                        <button type="button" class="learning-step-btn" onclick="change_setting('change_handL_color', 1)" aria-label="Farbe links">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
                     </div>
-                    <div class="justify-center flex">
-                        <label class="uppercase tracking-wide text-xs font-bold mt-2 text-gray-600 dark:text-gray-400">
-                            <input id="is_led_activeL" onchange="change_setting('change_left_led_active', this.checked)"
-                                class="w-4 h-4 mr-2 border border-gray-300 rounded"
-                                type="checkbox"/>
-                            <div class="inline" data-translate="active">Active</div>
-                        </label>
-                    </div>
+                    <label class="learning-toggle justify-center mt-2">
+                        <input id="is_led_activeL" onchange="change_setting('change_left_led_active', this.checked)"
+                            class="learning-checkbox"
+                            type="checkbox"/>
+                        <span data-translate="active">Active</span>
+                    </label>
                 </div>
 
-                <div class="w-full md:w-1/2 px-3 m-auto">
-                    <label class="block uppercase tracking-wide text-xs font-bold mt-2 text-gray-600 dark:text-gray-400"
+                <div class="learning-field">
+                    <label class="learning-label"
                            data-translate="right_hand_color">
                         Right hand color
                     </label>
-                    <div class="justify-center flex">
-                        <svg onclick="change_setting('change_handR_color', -1)" xmlns="http://www.w3.org/2000/svg"
-                             class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                        </svg>
-                        <div class="w-full justify-center flex text-sm text-gray-600 dark:text-gray-400">
-                            <svg class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <rect id="hand_colorR" width="30" height="30" style="fill:rgb(0,0,255);"/>
+                    <div class="learning-color-row flex items-center justify-center gap-3">
+                        <button type="button" class="learning-step-btn" onclick="change_setting('change_handR_color', -1)" aria-label="Farbe rechts">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
+                        <div class="learning-color-swatch">
+                            <svg class="h-12 w-12" viewBox="0 0 30 30">
+                                <rect id="hand_colorR" width="30" height="30" rx="6" style="fill:rgb(0,0,255);"/>
                             </svg>
                         </div>
-                        <svg onclick="change_setting('change_handR_color', 1)" xmlns="http://www.w3.org/2000/svg"
-                             class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
+                        <button type="button" class="learning-step-btn" onclick="change_setting('change_handR_color', 1)" aria-label="Farbe rechts">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
                     </div>
-                    <div class="justify-center flex">
-                        <label class="uppercase tracking-wide text-xs font-bold mt-2 text-gray-600 dark:text-gray-400">
-                            <input id="is_led_activeR" onchange="change_setting('change_right_led_active', this.checked)"
-                                class="w-4 h-4 mr-2 border border-gray-300 rounded"
-                                type="checkbox"/>
-                            <div class="inline" data-translate="active">Active</div>
-                        </label>
-                    </div>
+                    <label class="learning-toggle justify-center mt-2">
+                        <input id="is_led_activeR" onchange="change_setting('change_right_led_active', this.checked)"
+                            class="learning-checkbox"
+                            type="checkbox"/>
+                        <span data-translate="active">Active</span>
+                    </label>
                 </div>
             </div>
-            <div id="score_summary_toggle_wrapper" class="flex justify-center items-center my-2">
-                <label class="inline-flex items-center">
-                    <input id="show_score_checkbox" type="checkbox" class="w-4 h-4 mr-2 border border-gray-300 rounded" onchange="document.getElementById('score_display').classList.toggle('hidden', !this.checked); setCookie('show_score', this.checked ? '1' : '0', 365);" checked>
-                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400" data-translate="show_score">Show Score</span>
+            <div id="score_summary_toggle_wrapper" class="learning-toggles-row flex flex-wrap justify-center items-center gap-4 my-4">
+                <label class="learning-toggle">
+                    <input id="show_score_checkbox" type="checkbox" class="learning-checkbox" onchange="document.getElementById('score_display').classList.toggle('hidden', !this.checked); setCookie('show_score', this.checked ? '1' : '0', 365);" checked>
+                    <span data-translate="show_score">Show Score</span>
                 </label>
-                <label class="inline-flex items-center ml-6">
-                    <input id="show_summary_popup" type="checkbox" class="w-4 h-4 mr-2 border border-gray-300 rounded" onchange="setCookie('show_summary_popup', this.checked ? '1' : '0', 365)" checked>
-                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400" data-translate="show_summary">Show Summary</span>
+                <label class="learning-toggle">
+                    <input id="show_summary_popup" type="checkbox" class="learning-checkbox" onchange="setCookie('show_summary_popup', this.checked ? '1' : '0', 365)" checked>
+                    <span data-translate="show_summary">Show Summary</span>
                 </label>
             </div>
             <script>
@@ -680,7 +673,7 @@
                 })();
             </script>
               <!-- Score display -->
-              <div id="score_display" class="text-center text-xl font-bold text-gray-600 dark:text-gray-400">
+              <div id="score_display" class="text-center text-xl sm:text-2xl font-bold text-gray-600 dark:text-gray-400 py-2">
                 <bdi><span data-translate="Score">Score</span>: <span id="score_value">0</span>
                 <span class="text-lg ml-4"><span data-translate="Combo">Combo</span>: <span id="combo_value">0</span>x</span>
                 <span class="text-lg ml-4"><span data-translate="Multiplier">Multiplier</span>: <span id="multiplier_value">1</span>x</span></bdi>
@@ -718,7 +711,9 @@
                 </div>
             </div>
 
-            <div id="sheet_wrapper" style="height:80vh; margin-bottom: 100px;">
+            </div>
+
+            <div id="sheet_wrapper" class="sheet-wrapper">
                 {% include 'sheet_music.html' %}
             </div>
         </div>
