@@ -2785,6 +2785,8 @@ def set_practice_active():
         data = request.get_json()
         if data and 'active' in data:
             app_state.practice_active = bool(data['active'])
+            if not app_state.practice_active and app_state.practice_led_handler is not None:
+                app_state.practice_led_handler.clear()
             logger.info(f"Practice mode {'activated' if app_state.practice_active else 'deactivated'}")
             return jsonify(success=True, practice_active=app_state.practice_active)
         else:
@@ -2800,6 +2802,8 @@ def clear_websocket_midi_queue():
     try:
         if app_state.midiports:
             app_state.midiports.clear_websocket_midi_queue()
+            if app_state.practice_led_handler is not None:
+                app_state.practice_led_handler.clear()
             logger.info("Websocket MIDI queue cleared")
             return jsonify(success=True)
         else:

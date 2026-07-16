@@ -40,6 +40,7 @@ class AppState:
         # Currently selected profile id (set by web UI); None if not selected
         self.practice_active = False  # Track when practice tab is active
         self.websocket_midi_clients = set()  # Track active websocket MIDI clients
+        self.practice_led_handler = None
 
 
 # Create a single instance of AppState

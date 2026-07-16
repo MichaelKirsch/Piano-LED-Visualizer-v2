@@ -17,6 +17,9 @@ class LEDEffectsProcessor:
             if strength <= 0:
                 continue
 
+            if self.ledstrip.keylist_external_software[n] == 1:
+                continue
+
             if type(self.ledstrip.keylist_color[n]) is list:
                 red = self.ledstrip.keylist_color[n][0]
                 green = self.ledstrip.keylist_color[n][1]

@@ -4,6 +4,7 @@ from rpi_ws281x import Color
 
 from lib.functions import get_note_position, find_between
 from lib.log_setup import logger
+from lib.practice_led_handler import PracticeLedHandler
 
 # Import app_state to check practice_active flag
 try:
@@ -39,6 +40,9 @@ class MIDIEventProcessor:
         self.last_sustain = 0  # Track sustain pedal state
         # Time tracking for sequence advancement to prevent rapid triggering
         self.last_sequence_advance = 0
+        if app_state.practice_led_handler is None:
+            app_state.practice_led_handler = PracticeLedHandler(ledstrip, ledsettings, learning)
+        self.practice_led_handler = app_state.practice_led_handler
 
     def process_midi_events(self):
         """
@@ -86,12 +90,24 @@ class MIDIEventProcessor:
                     logger.warning(f"[process midi events] Unexpected exception occurred: {e}")
 
             midiports.last_activity = time.time()
-            # Update state manager for MIDI activity
             if self.state_manager:
                 self.state_manager.update_midi_activity()
 
             msg_type = getattr(msg, "type", None)
             velocity = getattr(msg, "velocity", 0)
+            channel = getattr(msg, "channel", 0)
+            practice_mode = hasattr(app_state, "practice_active") and app_state.practice_active
+
+            if practice_mode:
+                if PracticeLedHandler.is_hint_channel(channel) and msg_type in ("note_on", "note_off"):
+                    if msg_type == "note_off" or velocity == 0:
+                        self.practice_led_handler.handle_note_off(msg)
+                    elif velocity > 0:
+                        self.practice_led_handler.handle_note_on(msg)
+                elif msg_type == "control_change":
+                    handle_control_change(msg, msg_timestamp)
+                saving.restart_time()
+                return
 
             if ledsettings.mode != "Disabled" and msg_type in ("note_on", "note_off"):
                 note_position = get_position(msg.note, ledstrip, ledsettings)
